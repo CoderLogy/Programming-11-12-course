@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tim Berners-Lee - Programmer of Our Time</title>
+    <style>
+        /* Import Google Font */
+        @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+
+        /* Reset default styles and set base font */
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+          font-family: "Roboto", sans-serif;
+          font-size: 16px;
+          scroll-behavior: smooth;
+          background-color: rgb(231, 232, 209);
+          scroll-padding-top: 82px;
+        }
+
+        /* Logo styles */
+        .logo {
+          width: 25px;
+          height: auto;
+          cursor: pointer;
+          background-color: hsl(7, 47%, 49%);
+        }
+
+        /* Remove underline from logo anchor */
+        header a {
+          text-decoration: none;
+          background-color: #b85042;
+        }
+
+        /* Navigation styles */
+        .nav li,
+        .nav a,
+        .nav ul {
+          text-decoration: none;
+          list-style: none;
+          display: inline-block;
+          padding: 0 10px;
+          white-space: nowrap;
+          color: #020122;
+        }
+
+        /* Header styles */
+        header {
+          height: 75px;
+          background-color: #b85042;
+          position: sticky;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 30px 5%;
+          top: 0;
+          z-index: 1000;
+        }
+
+        /* Navigation hover effect */
+        .nav li a::after {
+          content: "";
+          height: 3px;
+          width: 100%;
+          position: relative;
+          display: block;
+          bottom: -15px;
+          background: #264653;
+          transition: transform 0.3s ease-in-out 0.1s, all 0.6s ease-in-out 0.1s;
+          opacity: 0;
+          transform: scaleX(0);
+          pointer-events: none;
+        }
+
+        .nav li a:hover::after,
+        .nav li a:focus::after {
+          opacity: 1;
+          transform: scaleX(1);
+        }
+
+        .nav li a:hover {
+          text-shadow: 0px 0.5px black;
+        }
+
+        /* Navigation background */
+        .nav li,
+        .nav ul,
+        .nav a,
+        .nav {
+          background-color: #a7beae;
+          padding: 4px;
+          border-radius: 5px;
+        }
+
+        /* Top info scroll animation */
+        .info_top {
+          margin-bottom: 20px;
+          height: 40px;
+          overflow: hidden;
+          white-space: nowrap;
+          width: 100%;
+          background-color: #a7beae;
+        }
+
+        .scroll {
+          display: flex;
+          margin-top: 10px;
+          justify-content: flex-start;
+          animation: scroll 30s linear infinite;
+          padding: 0 6rem;
+          letter-spacing: 1px;
+          background-color: #a7beae;
+        }
+
+        .scroll span {
+          background-color: #a7beae;
+          font-size: 25px;
+          margin-right: 100px;
+        }
+
+        @keyframes scroll {
+          0% {
+            transform: translateX(100%);
+          }
+          100% {
+            transform: translateX(-100%);
+          }
+        }
+
+        /* Footer styles */
+        footer {
+          text-align: center;
+          margin-top: 50px;
+          padding: 10px 0;
+        }
+
+        /* Table styles */
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          margin: 20px 0;
+        }
+
+        table,
+        th,
+        td {
+          border: 1px solid #333;
+          max-width: 500px;
+        }
+
+        th,
+        td {
+          padding: 10px;
+          text-align: left;
+        }
+
+        th {
+          background-color: #a7beae;
+        }
+
+        /* Form styles */
+        label,
+        legend {
+          background-color: #a7beae;
+        }
+
+        fieldset {
+          border: 2px solid #333;
+          border-radius: 5px;
+          padding: 10px;
+          margin: 20px 0;
+          background-color: #a7beae;
+        }
+
+        legend {
+          font-weight: bold;
+          padding: 0 10px;
+        }
+
+        /* Main content styles */
+        .main {
+          position: relative;
+        }
+
+        #career {
+          padding: 20px;
+          margin: 20px;
+        }
+
+        #career img {
+          height: auto;
+          width: 100%;
+          max-width: 300px;
+          float: right;
+          margin: 10px;
+        }
+
+        #career p {
+          margin-bottom: 55px;
+          text-align: left;
+        }
+
+        #earlylife {
+          margin-top: 50px;
+          display: flex;
+          width: 100%;
+          padding: 20px;
+          gap: 25px;
+          position: relative;
+        }
+
+        #earlylife img {
+          height: auto;
+          max-width: 200px;
+          max-height: 200px;
+        }
+
+        #earlylife p {
+          padding-bottom: 50px;
+          font-size: 15.5px;
+          max-width: 600px;
+          text-align: left;
+          line-height: 1.6;
+        }
+
+        #etc {
+          padding: 7px;
+          margin-top: 35px;
+          margin-bottom: 40px;
+        }
+
+        #etc li {
+          margin: 15px;
+        }
+
+        #etc p {
+          margin-bottom: 10px;
+        }
+
+        a {
+          color: #b85042;
+        }
+
+        #survey {
+          padding-top: 25px;
+        }
+
+        #survey p {
+          margin-top: 25px;
+          background-color: #a7beae;
+        }
+
+        #home {
+          display: flex;
+          flex-wrap: wrap;
+          width: 100%;
+          padding-top: 70px;
+          padding-bottom: 70px;
+        }
+
+        .imgs img {
+          height: auto;
+          width: 100%;
+          max-width: 350px;
+          margin: 30px;
+        }
+
+        .imgs {
+          display: flex;
+          justify-content: center;
+          flex: 1;
+        }
+
+        .text {
+          display: flex;
+          margin: 30px;
+          position: relative;
+          align-items: center;
+          height: 100%;
+          flex: 1;
+          top: 59px;
+          min-width: 300px;
+        }
+
+        .text p {
+          color: #020122;
+        }
+
+        button {
+          margin-top: 25px;
+          background-color: #b85042;
+          color: #e7e8d1;
+          padding: 10px 20px;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+        }
+
+        /* Responsive design */
+        @media screen and (max-width: 768px) {
+          header {
+            flex-direction: column;
+            height: auto;
+            padding: 10px 5%;
+          }
+
+          /* Hide logo on small screens */
+          .logo {
+            display: none;
+          }
+
+          .nav ul {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+          }
+
+          .nav li {
+            margin: 5px;
+          }
+
+          #home {
+            flex-direction: column;
+          }
+
+          .text {
+            order: 2;
+            text-align: center;
+            position: relative;
+            top: 20px;
+          }
+
+          .imgs {
+            order: 1;
+          }
+
+          #career img {
+            float: none;
+            display: block;
+            margin: 10px auto;
+          }
+
+          #earlylife {
+            gap: 10px;
+            flex-wrap: wrap;
+            flex-direction: column;
+          }
+          #earlylife p {
+            padding-bottom: 0;
+          }
+
+          #earlylife img {
+            margin: 0 auto;
+          }
+        }
+    </style>
+<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 384 512'><path d='M320 464c8.8 0 16-7.2 16-16l0-288-80 0c-17.7 0-32-14.3-32-32l0-80L64 48c-8.8 0-16 7.2-16 16l0 384c0 8.8 7.2 16 16 16l256 0zM0 64C0 28.7 28.7 0 64 0L229.5 0c17 0 33.3 6.7 45.3 18.7l90.5 90.5c12 12 18.7 28.3 18.7 45.3L384 448c0 35.3-28.7 64-64 64L64 512c-35.3 0-64-28.7-64-64L0 64z'/></svg>" type="image/svg+xml">
+
+<body>
+  <header>
+    <a href="#home">
+      <svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
+
+        <!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+        <path d="M320 464c8.8 0 16-7.2 16-16l0-288-80 0c-17.7 0-32-14.3-32-32l0-80L64 48c-8.8 0-16 7.2-16 16l0 384c0 8.8 7.2 16 16 16l256 0zM0 64C0 28.7 28.7 0 64 0L229.5 0c17 0 33.3 6.7 45.3 18.7l90.5 90.5c12 12 18.7 28.3 18.7 45.3L384 448c0 35.3-28.7 64-64 64L64 512c-35.3 0-64-28.7-64-64L0 64z" />
+      </svg></a>
+    <nav class="nav">
+      <ul class="nav_links">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#earlylife">Early Life</a></li>
+        <li><a href="#career">Career life</a></li>
+        <li><a href="#etc">Etc</a></li>
+        <li><a href="#survey">Survey</a></li>
+      </ul>
+    </nav>
+  </header>
+  <!-- Scrolling text section -->
+  <div class="info_top">
+    <div class="scroll">
+      <span>Programmers Of our time. </span>
+      <span>Programmers Of our time. </span>
+      <span>Programmers Of our time. </span>
+      <span>Programmers Of our time. </span>
+    </div>
+  </div>
+  <div class="main">
+    <!-- Main content area -->
+    <div id="home" class="main">
+      <div class="text">
+        <i><b>
+            <p>
+              “ I would have to create a system with common rules that would be acceptable to everyone. That meant as close as possible to no rules at all. ” <br> - Tims Berner Lee</p></i></b>
+      </div>
+      <div class="imgs">
+        <img src="https://cds.cern.ch/images/CERN-GE-9407011-31/file?size=large">
+      </div>
+    </div>
+    <div id="earlylife" class="main">
+      <h2>Early Life</h2>
+      <p><strong>Tim Berners-Lee</strong> was born in London, England, in 1955. His parents were both computer scientists, and their work greatly influenced his interest in technology.</p>
+      <p><em>In his early years, Tim showed a keen interest in electronics, often tinkering with gadgets and machines.</em></p>
+      <img src="https://study.com/cimages/multimages/16/young_tim.jpg" alt="Young Tim Berners-Lee">
+      <br><br>
+      <p>He attended <strong>Queen's College</strong> at the University of Oxford, where he studied physics and built his first computer from an old television set.</p>
+    </div>
+
+    <!-- Career Life -->
+    <div id="career" class="main">
+      <h2>Career Life</h2>
+      <p>Tim Berners-Lee's career is remarkable for one key achievement: the invention of the <strong>World Wide Web</strong> in 1989. He developed the first web browser and web server, enabling people to connect through the internet in ways never before imagined.</p>
+      <img src="https://media.cnn.com/api/v1/images/stellar/prod/210614211407-01-sir-tim-berners-lee-puts-original-world-wide-web-code-up-for-sale.jpg?q=w_2000,c_fill" alt="Tim Berners-Lee Inventing the Web" width="400" height="250">
+      <br><br>
+      <h3>Major Contributions</h3>
+      <ul>
+        <li>Invented the World Wide Web (WWW)</li>
+        <li>Developed the first web browser, WorldWideWeb</li>
+        <li>Authored the first webpage</li>
+        <li>
+          <p>Tim is also known for being a strong advocate for a free and open internet, free from commercial control.</p>
+        </li>
+      </ul>
+
+      <!-- Other Facts -->
+      <div id="etc" class="main">
+        <h2>Other Interesting Facts</h2>
+        <ol>
+          <li>He was knighted by Queen Elizabeth II in 2004.</li>
+          <li>He was named one of Time magazine's 100 Most Important People of the 20th Century.</li>
+          <li>He continues to lead the World Wide Web Consortium (W3C).</li>
+        </ol>
+        <p>You can learn more about Tim Berners-Lee on <a href="https://en.wikipedia.org/wiki/Tim_Berners-Lee" target="_blank">Wikipedia</a>.</p>
+      </div>
+
+      <!-- Table of Key Events -->
+      <div class="table">
+        <h3>Key Events in Tim Berners-Lee's Life</h3>
+        <table>
+          <tr>
+            <th>Year</th>
+            <th>Event</th>
+          </tr>
+          <tr>
+            <td>1955</td>
+            <td>Born in London, UK</td>
+          </tr>
+          <tr>
+            <td>1989</td>
+            <td>Invented the World Wide Web</td>
+          </tr>
+          <tr>
+            <td>1994</td>
+            <td>Founded the W3C</td>
+          </tr>
+          <tr>
+            <td>2004</td>
+            <td>Knighted by Queen Elizabeth II</td>
+          </tr>
+        </table>
+      </div>
+      <div id="survey" class="main">
+        <h2>Survey: What Do You Think About the Internet?</h2>
+        <p>We'd love to hear your thoughts about the internet and its role in your life.</p>
+        <form>
+          <fieldset>
+            <legend>Your Information</legend>
+            <!-- Text Input -->
+            <label for="name">Your Name:</label><br>
+            <input type="text" id="name" name="name" required><br><br>
+          </fieldset>
+
+          <fieldset>
+            <legend>Internet Usage</legend>
+            <!-- Radio Buttons -->
+            <p>How often do you use the internet?</p>
+            <input type="radio" id="daily" name="frequency" value="daily">
+            <label for="daily">Daily</label><br>
+            <input type="radio" id="weekly" name="frequency" value="weekly">
+            <label for="weekly">Weekly</label><br>
+            <input type="radio" id="monthly" name="frequency" value="monthly">
+            <label for="monthly">Monthly</label><br><br>
+          </fieldset>
+
+          <fieldset>
+            <legend>Usage Purpose</legend>
+            <!-- Checkbox -->
+            <p>What do you primarily use the internet for?</p>
+            <input type="checkbox" id="work" name="usage" value="work">
+            <label for="work">Work</label><br>
+            <input type="checkbox" id="social" name="usage" value="social">
+            <label for="social">Social Media</label><br>
+            <input type="checkbox" id="entertainment" name="usage" value="entertainment">
+            <label for="entertainment">Entertainment</label><br><br>
+          </fieldset>
+
+          <fieldset>
+            <legend>Browser Preferences</legend>
+            <!-- Dropdown -->
+            <label for="browser">Preferred Web Browser:</label><br>
+            <select id="browser" name="browser">
+              <option value="chrome">Google Chrome</option>
+              <option value="firefox">Mozilla Firefox</option>
+              <option value="safari">Apple Safari</option>
+              <option value="edge">Microsoft Edge</option>
+            </select><br><br>
+          </fieldset>
+          <button type="submit">Submit Survey</button>
+      </div>
+      <footer>
+        <p>&copy; 2024 Tim Programmers of our time Webpage | Created for Educational Purposes</p>
+      </footer>
+    </div>
+</body>
+</html>
