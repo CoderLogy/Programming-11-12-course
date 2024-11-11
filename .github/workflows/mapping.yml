@@ -13,24 +13,13 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Create a list of directories
+    - name: List directories and update index.html
       run: |
-        # Find all directories (not files), including nested directories
-        echo "Listing directories..."        
-        find . -type d -not -path '*/\.*' > directories.txt  # Exclude hidden directories (e.g., .git)
-
-    - name: Ensure .nojekyll exists
-      run: |
-        # Create a .nojekyll file to disable Jekyll processing on GitHub Pages
-        if [ ! -f .nojekyll ]; then
-          touch .nojekyll
-          echo ".nojekyll file created to disable Jekyll"
-        fi
-
-    - name: Update index.html
-      run: |
-        # Read the list of directories from the file
-        directories=$(cat directories.txt)
+        # Find all directories (including nested ones) in the repository
+        echo "Listing all directories..."
+        directories=$(find . -type d -not -path '*/\.*')  # Exclude hidden directories (e.g., .git)
+        
+        echo "Directories found: $directories"
 
         # Check if index.html exists, and create it if it doesn't
         if [ ! -f index.html ]; then
@@ -41,7 +30,7 @@ jobs:
         current_dirs=$(grep -oP '(?<=<a href=").*?(?="/>)' index.html || true)
 
         # Add new directories that are not already in the current index.html
-        echo "$directories" | while read dir; do
+        for dir in $directories; do
           # Only add directories (not files), and skip the ones already listed in index.html
           if [ -d "$dir" ] && [[ "$dir" != .* ]] && ! echo "$current_dirs" | grep -q "$dir"; then
             echo "<li><a href=\"$dir/\">$dir</a></li>" >> index.html
@@ -54,6 +43,14 @@ jobs:
         fi
         if ! grep -q "</body></html>" index.html; then
           echo "</body></html>" >> index.html
+        fi
+
+    - name: Ensure .nojekyll exists
+      run: |
+        # Create a .nojekyll file to disable Jekyll processing on GitHub Pages
+        if [ ! -f .nojekyll ]; then
+          touch .nojekyll
+          echo ".nojekyll file created to disable Jekyll"
         fi
 
     - name: Commit changes
