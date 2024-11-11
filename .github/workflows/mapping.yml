@@ -33,13 +33,22 @@ jobs:
           echo "<!DOCTYPE html><html><body><h1>Directories</h1><ul>" > index.html
         fi
 
+        # Debugging: Print current index.html content
+        echo "Current index.html content:"
+        cat index.html
+
         # Read the existing directories in the index.html, and store them in current_dirs
         current_dirs=$(grep -oP '(?<=<a href=").*?(?="/>)' index.html || true)
+
+        # Debugging: print current directories in index.html
+        echo "Current directories in index.html: $current_dirs"
 
         # Add new directories that are not already in the current index.html
         for dir in $directories; do
           # Skip current directory and any hidden directories (e.g., .git)
           if [ -d "$dir" ] && [[ "$dir" != .* ]] && ! echo "$current_dirs" | grep -q "$dir"; then
+            # Debugging: Show the directory being added
+            echo "Adding directory: $dir"
             # Create list items for directories (making sure paths are valid for href)
             echo "<li><a href=\"$dir/\">$dir</a></li>" >> index.html
           fi
