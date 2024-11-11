@@ -17,8 +17,8 @@ jobs:
       run: |
         # Find all directories (including nested ones) in the repository
         echo "Listing all directories..."
-        directories=$(find . -type d -not -path '*/\.*')  # Exclude hidden directories (e.g., .git)
-        
+        directories=$(find . -type d -not -path '*/\.*' -not -path '.' )  # Exclude hidden directories (e.g., .git) and current directory
+
         echo "Directories found: $directories"
 
         # Check if index.html exists, and create it if it doesn't
