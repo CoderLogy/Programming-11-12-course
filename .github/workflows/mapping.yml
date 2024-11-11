@@ -17,34 +17,36 @@ jobs:
       run: |
         # Find all directories (not files) in the repository
         echo "Listing directories..."        
-        find . -type d > directories.txt
+        find . -type d -not -path '*/\.*' > directories.txt  # Exclude hidden directories (e.g., .git)
 
     - name: Update index.html
       run: |
         # Read the list of directories from the file
         directories=$(cat directories.txt)
 
-        # Check if index.html exists and create it if it doesn't
+        # Check if index.html exists, and create it if it doesn't
         if [ ! -f index.html ]; then
           echo "<!DOCTYPE html><html><body><h1>Directories</h1><ul>" > index.html
         fi
 
-        # Get the current list of directories in index.html (if any)
+        # Read the existing directories in the index.html, and store them in current_dirs
         current_dirs=$(grep -oP '(?<=<a href=").*?(?="/>)' index.html || true)
 
-        # Append the new directories that aren't already listed in index.html
+        # Add new directories that are not already in the current index.html
         echo "$directories" | while read dir; do
-          # Add only directories and ignore the ones starting with a dot (hidden directories)
-          if [ -d "$dir" ] && [[ "$dir" != .* ]]; then
-            # If the directory isn't already listed in index.html, add it
-            if ! echo "$current_dirs" | grep -q "$dir"; then
-              echo "<li><a href=\"$dir/\">$dir</a></li>" >> index.html
-            fi
+          # Only add directories (not files), and skip the ones already listed in index.html
+          if [ -d "$dir" ] && [[ "$dir" != .* ]] && ! echo "$current_dirs" | grep -q "$dir"; then
+            echo "<li><a href=\"$dir/\">$dir</a></li>" >> index.html
           fi
         done
 
-        # Close the HTML tags
-        echo "</ul></body></html>" >> index.html
+        # Close the HTML tags if not already closed
+        if ! grep -q "</ul>" index.html; then
+          echo "</ul>" >> index.html
+        fi
+        if ! grep -q "</body></html>" index.html; then
+          echo "</body></html>" >> index.html
+        fi
 
     - name: Commit changes
       run: |
