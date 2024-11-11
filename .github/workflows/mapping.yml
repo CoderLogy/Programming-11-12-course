@@ -2,7 +2,6 @@ name: Update Index for New Directories
 
 on:
   push:
-    # This will trigger the action whenever a directory is added or modified
     paths:
       - '**/'  # Trigger the action when any directory is added or changed
 
@@ -24,17 +23,23 @@ jobs:
       run: |
         # Read the list of directories from the file
         directories=$(cat directories.txt)
-        
-        # Check if index.html exists, and create it if it doesn't
+
+        # Check if index.html exists and create it if it doesn't
         if [ ! -f index.html ]; then
           echo "<!DOCTYPE html><html><body><h1>Directories</h1><ul>" > index.html
         fi
-        
-        # Append the directory list to index.html
+
+        # Get the current list of directories in index.html (if any)
+        current_dirs=$(grep -oP '(?<=<a href=").*?(?="/>)' index.html || true)
+
+        # Append the new directories that aren't already listed in index.html
         echo "$directories" | while read dir; do
           # Add only directories and ignore the ones starting with a dot (hidden directories)
           if [ -d "$dir" ] && [[ "$dir" != .* ]]; then
-            echo "<li><a href=\"$dir/\">$dir</a></li>" >> index.html
+            # If the directory isn't already listed in index.html, add it
+            if ! echo "$current_dirs" | grep -q "$dir"; then
+              echo "<li><a href=\"$dir/\">$dir</a></li>" >> index.html
+            fi
           fi
         done
 
