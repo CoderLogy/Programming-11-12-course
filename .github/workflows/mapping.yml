@@ -15,11 +15,18 @@ jobs:
 
     - name: List directories and update index.html
       run: |
-        # Find all directories (including nested ones) in the repository
+        # Find all directories (including nested ones) in the repository, excluding the current directory
         echo "Listing all directories..."
-        directories=$(find . -type d -not -path '*/\.*' -not -path '.' )  # Exclude hidden directories (e.g., .git) and current directory
+        directories=$(find . -type d -not -path '*/\.*' -not -path '.')
 
+        # Debugging: print the directories found
         echo "Directories found: $directories"
+
+        # If no directories found, exit
+        if [ -z "$directories" ]; then
+          echo "No directories found. Exiting."
+          exit 0
+        fi
 
         # Check if index.html exists, and create it if it doesn't
         if [ ! -f index.html ]; then
@@ -31,13 +38,14 @@ jobs:
 
         # Add new directories that are not already in the current index.html
         for dir in $directories; do
-          # Only add directories (not files), and skip the ones already listed in index.html
+          # Skip current directory and any hidden directories (e.g., .git)
           if [ -d "$dir" ] && [[ "$dir" != .* ]] && ! echo "$current_dirs" | grep -q "$dir"; then
+            # Create list items for directories (making sure paths are valid for href)
             echo "<li><a href=\"$dir/\">$dir</a></li>" >> index.html
           fi
         done
 
-        # Ensure that the closing </ul> and </body></html> are only added once
+        # Ensure that the closing </ul> and </body></html> tags are only added once
         if ! grep -q "</ul>" index.html; then
           echo "</ul>" >> index.html
         fi
