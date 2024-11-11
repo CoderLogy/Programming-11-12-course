@@ -15,9 +15,17 @@ jobs:
 
     - name: Create a list of directories
       run: |
-        # Find all directories (not files) in the repository
+        # Find all directories (not files), including nested directories
         echo "Listing directories..."        
         find . -type d -not -path '*/\.*' > directories.txt  # Exclude hidden directories (e.g., .git)
+
+    - name: Ensure .nojekyll exists
+      run: |
+        # Create a .nojekyll file to disable Jekyll processing on GitHub Pages
+        if [ ! -f .nojekyll ]; then
+          touch .nojekyll
+          echo ".nojekyll file created to disable Jekyll"
+        fi
 
     - name: Update index.html
       run: |
@@ -40,7 +48,7 @@ jobs:
           fi
         done
 
-        # Close the HTML tags if not already closed
+        # Ensure that the closing </ul> and </body></html> are only added once
         if ! grep -q "</ul>" index.html; then
           echo "</ul>" >> index.html
         fi
@@ -52,6 +60,6 @@ jobs:
       run: |
         git config --global user.name "github-actions"
         git config --global user.email "github-actions@github.com"
-        git add index.html
-        git commit -m "Update index.html with new directories" || echo "No changes to commit"
+        git add index.html .nojekyll
+        git commit -m "Update index.html with new directories and add .nojekyll" || echo "No changes to commit"
         git push
