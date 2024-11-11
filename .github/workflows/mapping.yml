@@ -1,0 +1,50 @@
+name: Update Index for New Directories
+
+on:
+  push:
+    # This will trigger the action whenever a directory is added or modified
+    paths:
+      - '**/'  # Trigger the action when any directory is added or changed
+
+jobs:
+  update-index:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Create a list of directories
+      run: |
+        # Find all directories (not files) in the repository
+        echo "Listing directories..."        
+        find . -type d > directories.txt
+
+    - name: Update index.html
+      run: |
+        # Read the list of directories from the file
+        directories=$(cat directories.txt)
+        
+        # Check if index.html exists, and create it if it doesn't
+        if [ ! -f index.html ]; then
+          echo "<!DOCTYPE html><html><body><h1>Directories</h1><ul>" > index.html
+        fi
+        
+        # Append the directory list to index.html
+        echo "$directories" | while read dir; do
+          # Add only directories and ignore the ones starting with a dot (hidden directories)
+          if [ -d "$dir" ] && [[ "$dir" != .* ]]; then
+            echo "<li><a href=\"$dir/\">$dir</a></li>" >> index.html
+          fi
+        done
+
+        # Close the HTML tags
+        echo "</ul></body></html>" >> index.html
+
+    - name: Commit changes
+      run: |
+        git config --global user.name "github-actions"
+        git config --global user.email "github-actions@github.com"
+        git add index.html
+        git commit -m "Update index.html with new directories" || echo "No changes to commit"
+        git push
