@@ -45,5 +45,5 @@ def fibonacci_series(n: int) -> None:
         print(start, end=' ')
         start, end = end, start+end
 
-print("Fibonacci Series of 34 -> ", end='')
-fibonacci_series(34)
+print("Fibonacci Series of  -> ", end='')
+fibonacci_series(19)
