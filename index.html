@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="UTF-8">
   <title>Code Showcase</title>
 
   <!-- Prism.js CSS for syntax highlighting -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css">
-
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css">
+  <link rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.css">
   <style>
     body {
       font-family: sans-serif;
@@ -25,18 +29,28 @@
       padding: 1rem;
       background: #f5f5f5;
       overflow-x: auto;
-      margin-bottom: 2rem;
+      margin: 0.5rem 0;
     }
 
-    h2 {
-      margin-top: 2rem;
-      font-size: 1.2rem;
+    ul {
+      list-style-type: none;
+      padding-left: 0;
     }
 
-    .file-section {
-      border-bottom: 1px solid #ddd;
-      padding-bottom: 1rem;
+    li {
       margin-bottom: 1rem;
+    }
+
+    summary {
+      font-weight: bold;
+      cursor: pointer;
+      padding: 0.5rem;
+      background-color: #eee;
+      border-radius: 4px;
+    }
+
+    summary:hover {
+      background-color: #ddd;
     }
 
     .error {
@@ -46,20 +60,27 @@
 </head>
 
 <body>
-  <h1>Showcase</h1>
+  <h1>Project Showcase</h1>
+
+  <!-- Static project links -->
   <ul>
     <li><a href="programmer-of-time/">programmer-of-time</a></li>
     <li><a href="drag-the-tone/dist/">drag-the-tone</a></li>
   </ul>
-  
-  <div id="code-container"></div>
+
+  <!-- Container for GitHub files -->
+  <ol id="code-container">Code Showcase</ol>
 
   <!-- Prism.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
-
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.js"></script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js"></script>
   <script>
     const owner = 'Coderlogy'; // your GitHub username
     const repo = 'Programming-11-12-course'; // your repo name
@@ -74,23 +95,24 @@
         const files = await res.json();
 
         if (!Array.isArray(files) || files.length === 0) {
-          container.innerHTML = '<p class="error">No files found in the folder.</p>';
+          container.innerHTML = '<li class="error">No files found in the folder.</li>';
           return;
         }
 
         for (const file of files) {
           if (file.type !== 'file') continue;
 
-          const section = document.createElement('div');
-          section.className = 'file-section';
+          const li = document.createElement('li');
 
-          // File name
-          const h2 = document.createElement('h2');
-          h2.textContent = file.name;
-          section.appendChild(h2);
+          // Create collapsible details/summary
+          const details = document.createElement('details');
+          const summary = document.createElement('summary');
+          summary.textContent = file.name;
+          details.appendChild(summary);
 
           // Code block
           const pre = document.createElement('pre');
+          pre.classList.add('line-numbers');
           const code = document.createElement('code');
 
           const ext = file.name.split('.').pop();
@@ -106,14 +128,15 @@
           code.textContent = text;
 
           pre.appendChild(code);
-          section.appendChild(pre);
-          container.appendChild(section);
+          details.appendChild(pre);
+          li.appendChild(details);
+          container.appendChild(li);
 
           Prism.highlightElement(code);
         }
       } catch (err) {
         console.error(err);
-        container.innerHTML = `<p class="error">Failed to load files. Check console for details.</p>`;
+        container.innerHTML = `<li class="error">Failed to load files. Check console for details.</li>`;
       }
     }
 
